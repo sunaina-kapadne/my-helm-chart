@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: post-install-job
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "0"  # Execute this job first, if multiple hooks exist
+    "helm.sh/hook-delete-policy": hook-succeeded  # Delete the job after it succeeds
+spec:
+  template:
+    spec:
+      containers:
+        - name: post-install
+          image: busybox:latest
+          command: ['sh', '-c', 'echo "Helm installation complete!"; sleep 10']
+      restartPolicy: Never
+  backoffLimit: 1
